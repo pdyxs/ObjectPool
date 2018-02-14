@@ -175,6 +175,12 @@ public sealed class ObjectPool : MonoBehaviour
     }
     public static void Recycle(GameObject obj)
     {
+#if UNITY_EDITOR
+        if (!Application.isPlaying) {
+            Object.DestroyImmediate(obj);
+            return;
+        }
+#endif
         GameObject prefab;
         if (instance.spawnedObjects.TryGetValue(obj, out prefab))
             Recycle(obj, prefab);
